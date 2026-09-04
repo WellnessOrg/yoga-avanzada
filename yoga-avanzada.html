@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellness Club | Yoga Avanzado</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+  
+  :root {
+    --bg-color: #F7F4F0;
+    --surface: #FFFFFF;
+    --text-main: #2C2825;
+    --text-muted: #8C827A;
+    --accent: #A65D37;
+    --accent-hover: #8C4D2C;
+    --accent-light: #F4EBE6;
+    --glass-bg: rgba(247, 244, 240, 0.85);
+    --glass-border: rgba(230, 222, 215, 0.8);
+    --shadow: 0 15px 35px rgba(44, 40, 37, 0.05);
+    --radius: 24px;
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
+  h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--glass-bg); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--glass-border); padding: 18px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 38px; height: 38px; background: var(--accent); color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; box-shadow: 0 4px 12px rgba(166, 93, 55, 0.25);
+  }
+  .logo-text { font-size: 17px; font-weight: 600; letter-spacing: 0.5px; }
+
+  .nav-links { display: flex; gap: 8px; align-items: center; }
+  .nav-item {
+    padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 500;
+    color: var(--text-muted); text-decoration: none; transition: var(--transition);
+  }
+  .nav-item.active { background: var(--accent); color: white; font-weight: 600; box-shadow: 0 4px 12px rgba(166, 93, 55, 0.2); }
+  .nav-item:hover:not(.active) { background: var(--accent-light); color: var(--accent); }
+
+  /* CONTENEDOR PRINCIPAL */
+  .main-container { max-width: 900px; margin: 0 auto; padding: 120px 20px 80px; }
+
+  /* HERO / INFO DE LA CLASE */
+  .class-hero-card {
+    background: var(--surface); border-radius: var(--radius); padding: 40px;
+    box-shadow: var(--shadow); border: 1px solid rgba(230, 222, 215, 0.6);
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; margin-bottom: 40px;
+  }
+  .class-info-text .badge-level {
+    font-size: 0.75rem; font-weight: 600; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: block;
+  }
+  .class-info-text h1 { font-size: 2.8rem; margin-bottom: 15px; }
+  .class-info-text p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 25px; }
+  
+  .class-meta-grid { display: flex; gap: 30px; border-top: 1px solid #EFECE6; padding-top: 20px; }
+  .meta-item .meta-val { font-weight: 600; font-size: 0.95rem; display: block; }
+  .meta-item .meta-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+  .class-img-box { width: 100%; height: 280px; border-radius: 18px; overflow: hidden; }
+  .class-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* SECCIÓN DE RESERVA */
+  .booking-section {
+    background: var(--surface); border-radius: var(--radius); padding: 40px;
+    box-shadow: var(--shadow); border: 1px solid rgba(230, 222, 215, 0.6);
+  }
+  .section-title-main { font-size: 1.8rem; margin-bottom: 8px; text-align: center; }
+  .section-subtitle-main { color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 30px; }
+
+  .step-block { margin-bottom: 30px; }
+  .step-title-custom {
+    font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: block;
+  }
+
+  /* CALENDARIO REAL DINÁMICO */
+  .calendar-box { background: #FCFBF9; border: 2px solid var(--accent-light); border-radius: 16px; padding: 20px; }
+  .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; font-weight: 600; font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+  .cal-nav-btn {
+    background: transparent; border: 1px solid var(--accent-light); border-radius: 50%;
+    width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--text-main); transition: var(--transition);
+  }
+  .cal-nav-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+  .cal-day-name { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+  .cal-day {
+    padding: 10px 0; font-size: 0.85rem; border-radius: 10px; cursor: pointer; transition: var(--transition);
+    background: #ffffff; border: 1px solid #EFECE6;
+  }
+  .cal-day:hover { border-color: var(--accent); background: var(--accent-light); }
+  .cal-day.selected { background: var(--accent); color: white; border-color: var(--accent); font-weight: 600; }
+  .cal-day.disabled { opacity: 0.2; cursor: not-allowed; background: transparent; border: none; }
+
+  /* SELECTOR DE HORAS */
+  .picker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .picker-option {
+    background: #FCFBF9; border: 2px solid var(--accent-light); border-radius: 14px;
+    padding: 14px 10px; text-align: center; cursor: pointer; transition: var(--transition);
+  }
+  .picker-option:hover { border-color: var(--accent); background: var(--accent-light); }
+  .picker-option.selected { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 6px 15px rgba(166, 93, 55, 0.25); }
+  .picker-option span { display: block; }
+  .opt-title { font-weight: 600; font-size: 0.95rem; }
+  .opt-sub { font-size: 0.75rem; opacity: 0.8; margin-top: 2px; }
+
+  /* MAPA DE MATS */
+  .room-layout { display: flex; flex-direction: column; gap: 10px; }
+  .room-instructor {
+    text-align: center; background: #F7F4F0; padding: 6px; border-radius: 10px;
+    font-size: 0.75rem; font-weight: 600; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase;
+  }
+  .mat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .mat-spot {
+    background: #FCFBF9; border: 2px solid var(--accent-light); border-radius: 14px;
+    padding: 14px 10px; text-align: center; cursor: pointer; transition: var(--transition);
+  }
+  .mat-spot:hover { border-color: var(--accent); background: var(--accent-light); transform: translateY(-2px); }
+  .mat-spot.selected { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 6px 15px rgba(166, 93, 55, 0.3); }
+  .mat-spot .mat-icon { font-size: 18px; margin-bottom: 2px; display: block; }
+  .mat-spot .mat-name { font-size: 0.8rem; font-weight: 600; }
+
+  /* BOTÓN */
+  .btn-primary {
+    width: 100%; padding: 16px; background: var(--accent); color: white; border: none;
+    border-radius: 14px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition);
+    box-shadow: 0 6px 20px rgba(166, 93, 55, 0.25); margin-top: 20px;
+  }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-primary:disabled { background: #EFECE6; color: #B3ADA6; cursor: not-allowed; box-shadow: none; }
+
+  /* TICKET DE ÉXITO */
+  .success-card { background: #FCFBF9; border: 1px dashed var(--accent); border-radius: 18px; padding: 20px; margin-bottom: 20px; text-align: left; }
+  .success-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; }
+  .success-row:last-child { margin-bottom: 0; }
+  .success-label { color: var(--text-muted); }
+  .success-value { font-weight: 600; }
+  .success-check {
+    width: 60px; height: 60px; border-radius: 50%; background: var(--accent-light); color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 15px;
+  }
+  .hidden { display: none !important; }
+
+  @media(max-width: 768px) {
+    .class-hero-card { grid-template-columns: 1fr; }
+    nav { padding: 15px 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">W</div>
+      <div class="logo-text">Wellness Club</div>
+    </div>
+    <div class="nav-links">
+      <a href="#" class="nav-item">Cafetería</a>
+      <a href="#" class="nav-item active">Yoga</a>
+      <a href="#" class="nav-item">Estética</a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    
+    <!-- TARJETA SUPERIOR: YOGA AVANZADO -->
+    <div class="class-hero-card">
+      <div class="class-info-text">
+        <span class="badge-level">Nivel Avanzado · 75 min</span>
+        <h1 class="serif">Yoga Avanzado</h1>
+        <p>Práctica dinámica y desafiante orientada a invertidas, equilibrios exigentes sobre brazos y profundización en el control corporal.</p>
+        <div class="class-meta-grid">
+          <div class="meta-item">
+            <span class="meta-val">8</span>
+            <span class="meta-lbl">Cupos por clase</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-val">Lun · Mié · Vie</span>
+            <span class="meta-lbl">Días de clase</span>
+          </div>
+        </div>
+      </div>
+      <div class="class-img-box">
+        <img src="https://content.cuerpomente.com/medio/2024/09/19/clase-de-yoga_ff631630_1489516412_240919082317_1280x720.jpg" alt="Yoga Avanzado">
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE RESERVA -->
+    <div class="booking-section">
+      
+      <div id="bookingForm">
+        <h2 class="serif section-title-main">Elegí en tres pasos</h2>
+        <p class="section-subtitle-main">Seleccioná tu fecha disponible, horario y espacio ideal en la sala</p>
+
+        <!-- PASO 1: CALENDARIO RESTRINGIDO A LUNES, MIÉRCOLES Y VIERNES -->
+        <div class="step-block">
+          <span class="step-title-custom">1. Elegí la Fecha (Solo Lun · Mié · Vie)</span>
+          <div class="calendar-box">
+            <div class="cal-header">
+              <button class="cal-nav-btn" onclick="cambiarMes(-1)">‹</button>
+              <span id="calMonthYear">Mes Año</span>
+              <button class="cal-nav-btn" onclick="cambiarMes(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+          </div>
+        </div>
+
+        <!-- PASO 2: HORARIO -->
+        <div class="step-block">
+          <span class="step-title-custom">2. Elegí el Horario</span>
+          <div class="picker-grid" id="timePicker">
+            <div class="picker-option" onclick="elegirHora(this, '07:30 hs')">
+              <span class="opt-title">07:30 hs</span>
+              <span class="opt-sub">Matutino</span>
+            </div>
+            <div class="picker-option" onclick="elegirHora(this, '14:00 hs')">
+              <span class="opt-title">14:00 hs</span>
+              <span class="opt-sub">Mediodía</span>
+            </div>
+            <div class="picker-option" onclick="elegirHora(this, '20:00 hs')">
+              <span class="opt-title">20:00 hs</span>
+              <span class="opt-sub">Nocturno</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASO 3: MAT -->
+        <div class="step-block">
+          <span class="step-title-custom">3. Elegí tu Mat</span>
+          <div class="room-layout">
+            <div class="room-instructor">▲ Zona del Instructor ▲</div>
+            <div class="mat-row" id="matPicker">
+              <div class="mat-spot" onclick="elegirMat(this, 'Fila Frontal')">
+                <span class="mat-icon">⚡</span>
+                <span class="mat-name">Frontal</span>
+              </div>
+              <div class="mat-spot" onclick="elegirMat(this, 'Centro')">
+                <span class="mat-icon">🧘</span>
+                <span class="mat-name">Centro</span>
+              </div>
+              <div class="mat-spot" onclick="elegirMat(this, 'Ventanal')">
+                <span class="mat-icon">🌿</span>
+                <span class="mat-name">Ventanal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" id="btnConfirmar" disabled onclick="confirmarReserva()">Confirmar Mi Reserva</button>
+      </div>
+
+      <!-- TICKET DE ÉXITO -->
+      <div id="successTicket" class="hidden" style="text-align: center;">
+        <div class="success-check">✓</div>
+        <h3 class="serif" style="font-size: 1.8rem; margin-bottom: 6px;">¡Reserva Confirmada!</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px;">Prepárate para llevar tu práctica al siguiente nivel. ¡Namasté!</p>
+        
+        <div class="success-card">
+          <div class="success-row"><span class="success-label">Clase:</span><span class="success-value">Yoga Avanzado</span></div>
+          <div class="success-row"><span class="success-label">Fecha:</span><span class="success-value" id="resumenFecha">-</span></div>
+          <div class="success-row"><span class="success-label">Horario:</span><span class="success-value" id="resumenHora">-</span></div>
+          <div class="success-row"><span class="success-label">Ubicación:</span><span class="success-value" id="resumenMat">-</span></div>
+        </div>
+
+        <button class="btn-primary" onclick="reiniciarReserva()">Reservar otra fecha</button>
+      </div>
+
+    </div>
+
+  </div>
+
+<script>
+  let fechaSeleccionada = null;
+  let horaSeleccionada = null;
+  let matSeleccionado = null;
+
+  let fechaActual = new Date();
+  let mesActivo = fechaActual.getMonth();
+  let anioActivo = fechaActual.getFullYear();
+
+  const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+  function renderizarCalendario() {
+    const grid = document.getElementById('calGrid');
+    document.getElementById('calMonthYear').innerText = `${nombresMeses[mesActivo]} ${anioActivo}`;
+
+    let html = '<div class="cal-day-name">Lu</div><div class="cal-day-name">Ma</div><div class="cal-day-name">Mi</div><div class="cal-day-name">Ju</div><div class="cal-day-name">Vi</div><div class="cal-day-name">Sá</div><div class="cal-day-name">Do</div>';
+
+    let primerDiaIndex = new Date(anioActivo, mesActivo, 1).getDay();
+    primerDiaIndex = (primerDiaIndex === 0) ? 6 : primerDiaIndex - 1;
+
+    let totalDiasMes = new Date(anioActivo, mesActivo + 1, 0).getDate();
+
+    for (let i = 0; i < primerDiaIndex; i++) {
+      html += '<div class="cal-day disabled"></div>';
+    }
+
+    for (let dia = 1; dia <= totalDiasMes; dia++) {
+      let fechaObj = new Date(anioActivo, mesActivo, dia);
+      let diaSemana = fechaObj.getDay(); // 1 = Lunes, 3 = Miércoles, 5 = Viernes
+      
+      let fechaStr = `${dia} de ${nombresMeses[mesActivo]} ${anioActivo}`;
+      let esSeleccionado = (fechaSeleccionada === fechaStr) ? 'selected' : '';
+
+      // Solo permitimos hacer clic en Lunes (1), Miércoles (3) y Viernes (5)
+      if (diaSemana === 1 || diaSemana === 3 || diaSemana === 5) {
+        html += `<div class="cal-day ${esSeleccionado}" onclick="elegirFecha(this, '${fechaStr}')">${dia}</div>`;
+      } else {
+        html += `<div class="cal-day disabled">${dia}</div>`;
+      }
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function cambiarMes(direccion) {
+    mesActivo += direccion;
+    if (mesActivo > 11) {
+      mesActivo = 0;
+      anioActivo++;
+    } else if (mesActivo < 0) {
+      mesActivo = 11;
+      anioActivo--;
+    }
+    renderizarCalendario();
+  }
+
+  function elegirFecha(elemento, fecha) {
+    document.querySelectorAll('.cal-day').forEach(el => el.classList.remove('selected'));
+    elemento.classList.add('selected');
+    fechaSeleccionada = fecha;
+    verificarHabilitacion();
+  }
+
+  function elegirHora(elemento, hora) {
+    document.querySelectorAll('#timePicker .picker-option').forEach(el => el.classList.remove('selected'));
+    elemento.classList.add('selected');
+    horaSeleccionada = hora;
+    verificarHabilitacion();
+  }
+
+  function elegirMat(elemento, mat) {
+    document.querySelectorAll('#matPicker .mat-spot').forEach(el => el.classList.remove('selected'));
+    elemento.classList.add('selected');
+    matSeleccionado = mat;
+    verificarHabilitacion();
+  }
+
+  function verificarHabilitacion() {
+    const btn = document.getElementById('btnConfirmar');
+    if (fechaSeleccionada && horaSeleccionada && matSeleccionado) {
+      btn.disabled = false;
+    } else {
+      btn.disabled = true;
+    }
+  }
+
+  function confirmarReserva() {
+    document.getElementById('resumenFecha').innerText = fechaSeleccionada;
+    document.getElementById('resumenHora').innerText = horaSeleccionada;
+    document.getElementById('resumenMat').innerText = matSeleccionado;
+
+    document.getElementById('bookingForm').classList.add('hidden');
+    document.getElementById('successTicket').classList.remove('hidden');
+  }
+
+  function reiniciarReserva() {
+    fechaSeleccionada = null;
+    horaSeleccionada = null;
+    matSeleccionado = null;
+
+    document.querySelectorAll('.picker-option, .mat-spot').forEach(el => el.classList.remove('selected'));
+    document.getElementById('btnConfirmar').disabled = true;
+
+    document.getElementById('successTicket').classList.add('hidden');
+    document.getElementById('bookingForm').classList.remove('hidden');
+    renderizarCalendario();
+  }
+
+  renderizarCalendario();
+</script>
+</body>
+</html>
